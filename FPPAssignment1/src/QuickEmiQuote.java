@@ -6,8 +6,8 @@ public class QuickEmiQuote {
     private static int principal_p;
     private static int tenure_n;
     private static double anualInterestRate_APR;
-    private static int totalPayment;
-    private static int totalInterest;
+    private static double totalPayment;
+    private static double totalInterest;
     private  static double monthlyRate_r;
     private static double emi;
     private static Random random = new Random();
@@ -15,6 +15,7 @@ public class QuickEmiQuote {
     public static void main(String[] args) {
         randmomizeInputs();
         computeEmi();
+        integerViewOfEmi();
         tryAsampleQuote();
     }
 
@@ -27,17 +28,29 @@ public class QuickEmiQuote {
 
     static void computeEmi()
     {
-        monthlyRate_r = anualInterestRate_APR / 12 / 100;
-        emi = (principal_p * monthlyRate_r) * Math.pow(1 + monthlyRate_r,tenure_n)/ Math.pow(1 + monthlyRate_r, tenure_n) -1;
-        totalPayment = Math.round((int)emi) * tenure_n;
+        monthlyRate_r = anualInterestRate_APR / 12 / 100.0;
+        double power = Math.pow(1 + monthlyRate_r,tenure_n);
+        emi = principal_p * monthlyRate_r * power/ (power -1.0);
+        totalPayment = emi * tenure_n;
         totalInterest = totalPayment - principal_p;
+
+        int emiTruncated = (int)emi;
+        long emiRounded = Math.round(emi);
     }
 
+    static void integerViewOfEmi()
+    {
+        int emiTruncated = (int)emi;
+        long emiRounded = Math.round(emi);
+    }
     static void tryAsampleQuote()
     {
-        System.out.println("Monthly rate   :" + monthlyRate_r);
-        System.out.println("Total payment  :" + totalPayment);
-        System.out.println("Total Interest :" + totalInterest);
+        System.out.println("======================================");
+        System.out.println("      EMI Quote (sample)      ");
+        System.out.println("======================================");
+        System.out.printf("Monthly rate   $%,.3f %n", monthlyRate_r);
+        System.out.printf("Total payment  $%,.2f %n", totalPayment);
+        System.out.printf("Total Interest $%,.2f %n ", totalInterest);
     }
 }
 
